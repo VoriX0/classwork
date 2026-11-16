@@ -9,6 +9,8 @@ namespace
   class Vector;
   class ColoredPoint;
   class Brush;
+  class Circle;
+  class ColoredCircle;
 
   class Planar
   {
@@ -88,6 +90,76 @@ namespace
     }
   private:
     Point a_, b_;
+  };
+
+  class Circle: public Planar
+  {
+  public:
+    Circle(Point c, int r):
+      c_(c),
+      r_(r)
+    {}
+    virtual ~Circle() = default;
+
+    virtual std::ostream& info(std::ostream& out) override
+    {
+      return out << "Circle";
+    }
+    virtual int x() const override
+    {
+      return c_.x();
+    }
+
+    virtual int y() const override
+    {
+      return c_.y();
+    }
+    virtual int abs_sqr() const override
+    {
+      return c_.abs_sqr();
+    }
+    virtual double sqr() const
+    {
+      return 3.14 * r_ * r_;
+    }
+    void move(Point p)
+    {
+      c_ = p;
+    }
+    void resize(int r)
+    {
+      r_ = r;
+    }
+    private:
+      Point c_;
+      int r_;
+  };
+
+  class ColoredCircle: public Circle, public Colored
+  {
+  public:
+    ColoredCircle(Point c, int r, Color color):
+      Circle(c, r),
+      cl_(color)
+    {} 
+
+    virtual ~ColoredCircle() = default;
+
+    virtual std::ostream& info(std::ostream& out) override
+    {
+      return out << "Colored circle";
+    }
+
+    virtual Color getColor() const override
+    {
+      return cl_;
+    }
+    virtual void setColor(Color color) override
+    {
+      cl_ = color;
+    }
+    private:
+      Color cl_;
   };
 
   class ColoredPoint: public Planar, public Colored
